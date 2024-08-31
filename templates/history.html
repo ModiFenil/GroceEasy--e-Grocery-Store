@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%); /* Gradient background */
+            overflow: hidden;
+            padding: 15px 0; /* Increased padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Larger shadow */
+            font-size: 20px; /* Increased font size */
+        }
+        .navbar-left, .navbar-right {
+            display: flex;
+            float: left;
+        }
+        .navbar-left a, .navbar-right a {
+            color: white;
+            text-align: center;
+            padding: 16px 25px;
+            text-decoration: none;
+            font-size: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar-left a:hover, .navbar-right a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #333;
+        }
+        .navbar-right {
+            float: right;
+        }
+        .content {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('products') }}">Products</a>
+            <a href="{{ url_for('cart') }}">Cart</a>
+            <a href="{{ url_for('checkout') }}">Checkout</a>
+        </div>
+        <div class="navbar-right">
+            <a href="{{ url_for('purchase_history') }}">Order History</a> <!-- Ensure this matches the route in your Flask app -->
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Order History</h1>
+        {% if orders %}
+            <ul>
+                {% for order in orders %}
+                    <li>
+                        <strong>Order ID:</strong> {{ order['_id'] }}<br>
+                        <strong>Date:</strong> {{ order['order_date'].strftime('%Y-%m-%d %H:%M:%S') }}<br> <!-- Format date if needed -->
+                        <strong>Total:</strong> Rs. {{ order['total_amount'] }}<br>
+                        <strong>Items:</strong>
+                        <ul>
+                            {% for item in order['items'] %}
+                                <li>{{ item['name'] }} - Rs. {{ item['price'] }} (Quantity: {{ item['quantity'] }})</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No orders found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
